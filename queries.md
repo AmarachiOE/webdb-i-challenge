@@ -26,6 +26,16 @@
 `update Customers set PostalCode = "11122" where ContactName = "Bilbo Baggins"`
 
 ## list orders grouped by customer showing the number of orders per customer. _Rattlesnake Canyon Grocery_ should have 7 orders.
+
+### Correct command:
+`select Orders.Orderid, Customers.CustomerName, count(Orders.OrderId) as "Number of Orders"
+	from Orders 
+    inner join Customers
+    on Orders.CustomerID = Customers.CustomerID
+    group by CustomerName
+`
+
+### Practicing commands:
 `
 select CustomerId, count(*) as "Number of Orders"
     from Orders
@@ -33,7 +43,8 @@ select CustomerId, count(*) as "Number of Orders"
     order by CustomerId desc
 `
 
-Joins Orders and Customers table together based on CustomerID
+(Joins Orders and Customers table together based on CustomerID)
+
 `
 select * 
 from Orders O
@@ -46,3 +57,11 @@ on O.CustomerID=C.CustomerID
 ## list orders grouped by customer's city showing number of orders per city. Returns 58 Records with _Aachen_ showing 2 orders and _Albuquerque_ showing 7 orders.
 
 ## delete all users that have no orders. Should delete 17 (or 18 if you haven't deleted the record added) records.
+`Delete from Customers where CustomerID not in (select CustomerID from Orders)`
+
+or
+
+`Delete from Customers where not exists (
+    select * from Orders
+    where Customers.CustomerID = Orders.CustomerID
+)`
